@@ -7,11 +7,13 @@ import okio.IOException
 
 interface PodcastRepository {
     fun getBestPodcasts(): Flow<Result<List<Podcast>>>
+
+    fun getPodcastDetail(podcastId: String): Flow<Result<Podcast>>
 }
 
 class PodcastRepositoryImpl(
     private val api: PodcastService
-): PodcastRepository {
+) : PodcastRepository {
 
     override fun getBestPodcasts(): Flow<Result<List<Podcast>>> {
         return flow {
@@ -23,6 +25,19 @@ class PodcastRepositoryImpl(
             }
 
             emit(Result.Success(podcastsFromApi))
+        }
+    }
+
+    override fun getPodcastDetail(podcastId: String): Flow<Result<Podcast>> {
+        return flow {
+            val podcastFromApi = try {
+                api.getPodcastDetail(podcastId)
+            } catch (e: IOException) {
+                emit(Result.Error(message = "Error loading podcast detail"))
+                return@flow
+            }
+
+            emit(Result.Success(podcastFromApi))
         }
     }
 }

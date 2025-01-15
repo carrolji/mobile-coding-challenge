@@ -1,4 +1,4 @@
-package com.example.audiobooks
+package com.example.audiobooks.ui
 
 data class PodcastUIState(
     val id: String,
@@ -7,5 +7,5 @@ data class PodcastUIState(
     val title: String? = null,
     val publisher: String? = null,
     val description: String? = null,
-    val favourite: Boolean = false,
+    var favourite: Boolean = false,
 )
