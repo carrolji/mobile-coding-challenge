@@ -1,6 +1,6 @@
 package com.example.audiobooks
 
-data class Podcast(
+data class PodcastUIState(
     val id: String,
     val thumbnails: String? = null,
     val image: String? = null,

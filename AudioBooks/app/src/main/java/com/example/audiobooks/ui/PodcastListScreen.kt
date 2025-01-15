@@ -1,4 +1,4 @@
-package com.example.audiobooks
+package com.example.audiobooks.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,11 +22,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.audiobooks.PodcastUIState
 
 @Composable
-fun PodcastListScreen(podcasts: List<Podcast>, onNavigate: (Int) -> Unit) {
+fun PodcastListScreen(podcastUIStates: List<PodcastUIState>, onNavigate: (Int) -> Unit) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(podcasts) { podcast ->
+        items(podcastUIStates) { podcast ->
             Row(
                 modifier = Modifier.padding(10.dp),
                 verticalAlignment = Alignment.CenterVertically,

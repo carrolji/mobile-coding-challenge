@@ -1,4 +1,4 @@
-package com.example.audiobooks
+package com.example.audiobooks.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,9 +20,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.audiobooks.PodcastUIState
 
 @Composable
-fun PodcastDetailScreen(podcast: Podcast) {
+fun PodcastDetailScreen(podcastUIState: PodcastUIState) {
 
     Column(
         modifier = Modifier
@@ -31,7 +32,7 @@ fun PodcastDetailScreen(podcast: Podcast) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = podcast.title ?: "",
+            text = podcastUIState.title ?: "",
             fontWeight = FontWeight.Bold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -40,7 +41,7 @@ fun PodcastDetailScreen(podcast: Podcast) {
                 .padding(5.dp)
         )
         Text(
-            text = podcast.publisher ?: "",
+            text = podcastUIState.publisher ?: "",
             fontSize = 12.sp,
             color = Color.Gray,
             fontStyle = FontStyle.Italic,
@@ -48,7 +49,7 @@ fun PodcastDetailScreen(podcast: Podcast) {
                 .padding(horizontal = 5.dp)
         )
         AsyncImage(
-            model = podcast.thumbnails,
+            model = podcastUIState.thumbnails,
             contentDescription = null,
             modifier = Modifier
                 .padding(horizontal = 5.dp)
@@ -57,7 +58,7 @@ fun PodcastDetailScreen(podcast: Podcast) {
         )
         //Button { Text(text = "Favorite") }
         Text(
-            text = podcast.description ?: "",
+            text = podcastUIState.description ?: "",
             fontSize = 12.sp,
             textAlign = TextAlign.Center,
             color = Color.Gray,
@@ -71,7 +72,7 @@ fun PodcastDetailScreen(podcast: Podcast) {
 @Preview
 @Composable
 fun PodcastDetailScreenPreview() {
-    val mock = Podcast(
+    val mock = PodcastUIState(
         id = "1",
         title = "WorkLife",
         publisher = "Ted",
