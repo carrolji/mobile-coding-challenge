@@ -40,10 +40,11 @@ import com.example.audiobooks.R
 @Composable
 fun PodcastDetailScreen(
     viewModel: PodcastsViewModel,
-    podCastId: String,
+    podcastId: String,
     navController: NavHostController,
+    onEvent: (PodcastUiEvent) -> Unit,
 ) {
-    val podcast by viewModel.podcast.collectAsState()
+    val uiState by viewModel.podcastItemUiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -65,13 +66,18 @@ fun PodcastDetailScreen(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Back"
             )
-            Text(text = "Back", fontWeight = FontWeight.Bold)
+            Text(
+                modifier = Modifier.padding(start = 4.dp),
+                text = "Back",
+                fontWeight = FontWeight.Bold
+            )
         }
-        if (podcast.id == "") {
+
+        if (uiState.isLoading) {
             CircularProgressIndicator()
         } else {
             Text(
-                text = podcast.title ?: "",
+                text = uiState.podcast.title ?: "",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center,
@@ -79,7 +85,7 @@ fun PodcastDetailScreen(
                     .padding(top = 20.dp)
             )
             Text(
-                text = podcast.publisher ?: "",
+                text = uiState.podcast.publisher ?: "",
                 fontSize = 13.sp,
                 color = Color.Gray,
                 fontStyle = FontStyle.Italic,
@@ -87,7 +93,7 @@ fun PodcastDetailScreen(
                     .padding(5.dp)
             )
             AsyncImage(
-                model = podcast.image,
+                model = uiState.podcast.image,
                 contentDescription = null,
                 modifier = Modifier
                     .padding(10.dp)
@@ -95,7 +101,7 @@ fun PodcastDetailScreen(
                     .height(250.dp)
             )
             Button(
-                onClick = { viewModel.updateFavouritePodcast(podCastId) },
+                onClick = { onEvent(PodcastUiEvent.OnFavouritePodcast(podcastId)) },
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = colorResource(R.color.favorite),
@@ -103,14 +109,14 @@ fun PodcastDetailScreen(
                 )
             ) {
                 Text(
-                    text = if (podcast.favourite) "Favourited" else "Favourite",
+                    text = if (uiState.podcast.favourite) "Favourited" else "Favourite",
                     fontSize = 13.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
                 )
             }
 
-            val spannedText = HtmlCompat.fromHtml(podcast.description ?: "", 0)
+            val spannedText = HtmlCompat.fromHtml(uiState.podcast.description ?: "", 0)
             val description = buildAnnotatedString {
                 append(spannedText)
             }

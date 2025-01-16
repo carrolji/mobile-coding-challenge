@@ -16,28 +16,33 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.example.audiobooks.PodcastsViewModel
+import com.example.audiobooks.R
 import com.example.audiobooks.nav.Screen
 
 @Composable
 fun PodcastListScreen(
-    podcasts: List<PodcastUIState>,
+    viewModel: PodcastsViewModel,
     navController: NavHostController,
-    onAction: (PodcastAction) -> Unit,
+    onEvent: (PodcastUiEvent) -> Unit,
 ) {
-    if (podcasts.isEmpty()) {
+    val podcastsUIState by viewModel.podcastsUiState.collectAsState()
+
+    if (podcastsUIState.isLoading) {
         Column(
             modifier = Modifier
                 .background(Color.White)
@@ -48,15 +53,17 @@ fun PodcastListScreen(
             CircularProgressIndicator()
         }
     } else {
-        LazyColumn(modifier = Modifier
-            .background(Color.White)
-            .fillMaxSize()) {
-            items(podcasts) { podcast ->
+        LazyColumn(
+            modifier = Modifier
+                .background(Color.White)
+                .fillMaxSize()
+        ) {
+            items(podcastsUIState.podcastList) { podcast ->
                 Row(
                     modifier = Modifier
                         .padding(10.dp)
                         .clickable {
-                            onAction(PodcastAction.ViewPodcastDetail(podcast.id))
+                            onEvent(PodcastUiEvent.OnViewPodcastDetail(podcast.id))
                             navController.navigate(route = Screen.PodcastDetailScreen.route + "?podcastId=${podcast.id}")
                         },
                     verticalAlignment = Alignment.CenterVertically,
@@ -91,6 +98,8 @@ fun PodcastListScreen(
                         )
                         Text(
                             text = if (podcast.favourite) "Favourited" else "",
+                            fontSize = 12.sp,
+                            color = colorResource(R.color.favorite),
                             modifier = Modifier
                                 .padding(horizontal = 5.dp, vertical = 5.dp)
                                 .fillMaxWidth(),
@@ -102,10 +111,3 @@ fun PodcastListScreen(
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun EmptyPodCastPreview() {
-//    val nav = rememberNavController()
-//    PodcastListScreen(emptyList(), nav)
-//}

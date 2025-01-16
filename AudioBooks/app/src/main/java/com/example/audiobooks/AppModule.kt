@@ -8,7 +8,6 @@ import com.example.audiobooks.data.local.PodcastDatabase
 import com.example.audiobooks.data.remote.PodcastService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -54,10 +53,6 @@ val appModule = module {
 
     single<PodcastRepository> {
         PodcastRepositoryImpl(get(), get())
-    }
-
-    single<GetPodCastListUseCase> {
-        GetPodCastListUseCase(get())
     }
 
     viewModel {

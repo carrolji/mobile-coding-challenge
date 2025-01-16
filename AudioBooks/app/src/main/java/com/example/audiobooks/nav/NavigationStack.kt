@@ -1,8 +1,6 @@
 package com.example.audiobooks.nav
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,8 +16,7 @@ fun NavigationStack(viewModel: PodcastsViewModel) {
 
     NavHost(navController = navController, startDestination = Screen.PodcastListScreen.route) {
         composable(route = Screen.PodcastListScreen.route) {
-            val podcasts by viewModel.podcastsList.collectAsState()
-            PodcastListScreen(podcasts, navController, viewModel::onAction)
+            PodcastListScreen(viewModel, navController, viewModel::onEvent)
         }
         composable(
             route = Screen.PodcastDetailScreen.route + "?podcastId={podcastId}",
@@ -30,9 +27,8 @@ fun NavigationStack(viewModel: PodcastsViewModel) {
                 }
             )
         ) {
-            val id = it.arguments?.getString("podcastId") ?: ""
-            viewModel.getPodcastDetail(id)
-            PodcastDetailScreen(viewModel, id, navController)
+            val podcastId = it.arguments?.getString("podcastId") ?: ""
+            PodcastDetailScreen(viewModel, podcastId, navController, viewModel::onEvent)
         }
     }
 }

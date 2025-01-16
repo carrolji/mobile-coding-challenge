@@ -2,7 +2,7 @@ package com.example.audiobooks.data.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.audiobooks.ui.PodcastUIState
+import com.example.audiobooks.ui.Podcast
 
 @Entity
 data class PodcastEntity(
@@ -15,7 +15,7 @@ data class PodcastEntity(
     val description: String? = null,
     var favourite: Boolean = false,
 ) {
-    fun toModel() = PodcastUIState(
+    fun toModel() = Podcast(
         id = id,
         thumbnails = thumbnails,
         image = image,
