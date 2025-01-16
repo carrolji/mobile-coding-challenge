@@ -9,7 +9,7 @@ data class PodcastsRemoteResponse(
     val next_page_number: Int,
     val page_number: Int,
     val parent_id: Int,
-    val podcasts: List<Podcast>,
+    val podcasts: List<PodcastResponse>,
     val previous_page_number: Int,
     val total: Int
 )

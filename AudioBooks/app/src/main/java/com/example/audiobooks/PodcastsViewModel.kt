@@ -1,5 +1,6 @@
 package com.example.audiobooks
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.audiobooks.data.PodcastRepository
@@ -38,25 +39,19 @@ class PodcastsViewModel(
     }
 
     private fun getPodcasts() = viewModelScope.launch {
-        podcastRepository.getBestPodcasts().collectLatest { result ->
+        podcastRepository.getPodcastList(true).collectLatest { result ->
             when(result) {
-                is Result.Error -> TODO()
+                is Result.Error -> Log.d("podcastsVM", "error: ${result.message}")
                 is Result.Success -> {
                     result.data?.let { podcasts ->
-                        val updateItem = podcasts.map {
-                            PodcastUIState(
-                                id = it.id,
-                                thumbnails = it.thumbnail,
-                                image = it.image,
-                                title = it.title,
-                                publisher = it.publisher,
-                                description = it.description,
-                            )
-                        }
                         _podcastsList.update {
-                            updateItem
+                            podcasts
                         }
                     }
+                }
+
+                is Result.Loading -> {
+                    Log.d("podcastsVM", "Loading")
                 }
             }
         }
@@ -65,21 +60,20 @@ class PodcastsViewModel(
     fun getPodcastDetail(podcastId: String) = viewModelScope.launch {
         podcastRepository.getPodcastDetail(podcastId).collectLatest { result ->
             when(result) {
-                is Result.Error -> TODO()
+                is Result.Error -> {
+                    Log.d("podcastsVM", "error: ${result.message}")
+                }
                 is Result.Success -> {
                     result.data?.let { podcast ->
-                        val updateItem = PodcastUIState(
-                            id = podcast.id,
-                            thumbnails = podcast.thumbnail,
-                            image = podcast.image,
-                            title = podcast.title,
-                            publisher = podcast.publisher,
-                            description = podcast.description,
-                        )
                         _podcast.update {
-                            updateItem
+                            podcast
                         }
+
                     }
+                }
+
+                is Result.Loading -> {
+                    Log.d("podcastsVM", "Loading")
                 }
             }
         }

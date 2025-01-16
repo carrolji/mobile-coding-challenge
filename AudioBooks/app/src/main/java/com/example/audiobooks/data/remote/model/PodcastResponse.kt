@@ -1,6 +1,8 @@
 package com.example.audiobooks.data.remote.model
 
-data class Podcast(
+import com.example.audiobooks.data.local.PodcastEntity
+
+data class PodcastResponse(
     val audio_length_sec: Int,
     val country: String,
     val description: String,
@@ -30,4 +32,14 @@ data class Podcast(
     val type: String,
     val update_frequency_hours: Int,
     val website: String
-)
+) {
+    fun toPodcastEntity() = PodcastEntity(
+        id = id,
+        thumbnails = thumbnail,
+        image = image,
+        title = title,
+        publisher = publisher,
+        description = description,
+        favourite = false
+    )
+}
