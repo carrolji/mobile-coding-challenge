@@ -19,7 +19,7 @@ fun NavigationStack(viewModel: PodcastsViewModel) {
     NavHost(navController = navController, startDestination = Screen.PodcastListScreen.route) {
         composable(route = Screen.PodcastListScreen.route) {
             val podcasts by viewModel.podcastsList.collectAsState()
-            PodcastListScreen(podcasts, navController)
+            PodcastListScreen(podcasts, navController, viewModel::onAction)
         }
         composable(
             route = Screen.PodcastDetailScreen.route + "?podcastId={podcastId}",
@@ -32,7 +32,7 @@ fun NavigationStack(viewModel: PodcastsViewModel) {
         ) {
             val id = it.arguments?.getString("podcastId") ?: ""
             viewModel.getPodcastDetail(id)
-            PodcastDetailScreen(viewModel)
+            PodcastDetailScreen(viewModel, id, navController)
         }
     }
 }

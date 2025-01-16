@@ -1,4 +1,4 @@
-package com.example.audiobooks.data
+package com.example.audiobooks.data.remote
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

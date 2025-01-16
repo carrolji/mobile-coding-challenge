@@ -1,4 +1,4 @@
-package com.example.audiobooks.data.model
+package com.example.audiobooks.data.remote.model
 
 data class Podcast(
     val audio_length_sec: Int,
@@ -7,7 +7,7 @@ data class Podcast(
     val earliest_pub_date_ms: Long,
     val email: String,
     val explicit_content: Boolean,
-    val extra: Extra,
+    val extra: Extra?,
     val genre_ids: List<Int>,
     val has_guest_interviews: Boolean,
     val has_sponsors: Boolean,

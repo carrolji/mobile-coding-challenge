@@ -1,4 +1,4 @@
-package com.example.audiobooks.data.model
+package com.example.audiobooks.data.remote.model
 
 data class Extra(
     val amazon_music_url: String,

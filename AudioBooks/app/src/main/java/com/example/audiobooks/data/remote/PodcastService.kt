@@ -1,7 +1,7 @@
-package com.example.audiobooks.data
+package com.example.audiobooks.data.remote
 
-import com.example.audiobooks.data.model.Podcast
-import com.example.audiobooks.data.model.PodcastsRemoteResponse
+import com.example.audiobooks.data.remote.model.Podcast
+import com.example.audiobooks.data.remote.model.PodcastsRemoteResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 

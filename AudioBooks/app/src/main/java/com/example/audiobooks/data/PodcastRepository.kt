@@ -1,6 +1,8 @@
 package com.example.audiobooks.data
 
-import com.example.audiobooks.data.model.Podcast
+import com.example.audiobooks.data.remote.model.Podcast
+import com.example.audiobooks.data.remote.PodcastService
+import com.example.audiobooks.data.remote.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okio.IOException

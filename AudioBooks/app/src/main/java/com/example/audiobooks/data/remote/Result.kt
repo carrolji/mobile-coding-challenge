@@ -1,4 +1,4 @@
-package com.example.audiobooks.data
+package com.example.audiobooks.data.remote
 
 sealed class Result<T>(
     val data: T? = null,

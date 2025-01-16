@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    id("kotlin-kapt")
 }
 
 android {
@@ -58,6 +59,7 @@ dependencies {
 
     implementation(libs.androidx.ui)
     implementation(libs.androidx.material)
+    implementation(libs.androidx.material.icons.extended)
     // Android Studio Preview support
     implementation("androidx.compose.ui:ui-tooling-preview")
     debugImplementation(libs.androidx.ui.tooling)
@@ -75,4 +77,12 @@ dependencies {
     implementation(libs.logging.interceptor)
     //Compose navigation
     implementation(libs.androidx.navigation.compose)
+
+    //Room
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
+    kapt("androidx.room:room-compiler:2.6.1")
+    //Dependency Injection
+    implementation(libs.koin.android)
+    testImplementation(libs.koin.test.junit4)
 }

@@ -35,22 +35,30 @@ import com.example.audiobooks.nav.Screen
 fun PodcastListScreen(
     podcasts: List<PodcastUIState>,
     navController: NavHostController,
+    onAction: (PodcastAction) -> Unit,
 ) {
     if (podcasts.isEmpty()) {
         Column(
-            modifier = Modifier.background(Color.White).fillMaxSize(),
+            modifier = Modifier
+                .background(Color.White)
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CircularProgressIndicator()
         }
     } else {
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(modifier = Modifier
+            .background(Color.White)
+            .fillMaxSize()) {
             items(podcasts) { podcast ->
                 Row(
-                    modifier = Modifier.padding(10.dp).clickable {
-                        navController.navigate(route = Screen.PodcastDetailScreen.route + "?podcastId=${podcast.id}")
-                    },
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .clickable {
+                            onAction(PodcastAction.ViewPodcastDetail(podcast.id))
+                            navController.navigate(route = Screen.PodcastDetailScreen.route + "?podcastId=${podcast.id}")
+                        },
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     AsyncImage(
@@ -89,17 +97,15 @@ fun PodcastListScreen(
                         )
                     }
                 }
-
-
                 Divider(color = Color.LightGray, thickness = 0.5.dp)
             }
         }
     }
 }
 
-@Preview
-@Composable
-fun EmptyPodCastPreview() {
-    val nav = rememberNavController()
-    PodcastListScreen(emptyList(), nav)
-}
+//@Preview
+//@Composable
+//fun EmptyPodCastPreview() {
+//    val nav = rememberNavController()
+//    PodcastListScreen(emptyList(), nav)
+//}

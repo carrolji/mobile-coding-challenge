@@ -1,4 +1,4 @@
-package com.example.audiobooks.data.model
+package com.example.audiobooks.data.remote.model
 
 data class LookingFor(
     val cohosts: Boolean,

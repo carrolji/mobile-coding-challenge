@@ -1,4 +1,4 @@
-package com.example.audiobooks.data.model
+package com.example.audiobooks.data.remote.model
 
 data class PodcastsRemoteResponse(
     val has_next: Boolean,
