@@ -14,8 +14,8 @@ You will be building a simple two-screen podcasts app. A basic mockup is provide
 
 - [x] Show a list of podcasts using the endpoint provided below.
 - [x] Each list item should show the podcast thumbnail, title, and publisher name.
-- [ ] Leave some space for the "Favourited" label (refer to the second podcast in the list in the mockup above).
-- [ ] Show the Favourited label only if the podcast has been favourited, otherwise hide the label.
+- [x] Leave some space for the "Favourited" label (refer to the second podcast in the list in the mockup above).
+- [x] Show the Favourited label only if the podcast has been favourited, otherwise hide the label.
 
 #### Screen 2
 
@@ -32,23 +32,25 @@ You will be building a simple two-screen podcasts app. A basic mockup is provide
 - [x] For the API, use data provided by Listen Notes:
 	 - [x] Use the following endpoint to fetch podcast data: https://www.listennotes.com/api/docs/?lang=kotlin&test=1#get-api-v2-best_podcasts
 	 - [x] No API key required, you can simply use the mock server to fetch test data. [More information here](https://www.listennotes.help/article/48-how-to-test-the-podcast-api-without-an-api-key "More information here").
-- [ ] Focus on implementing the app in portrait orientation only.
+- [x] Focus on implementing the app in portrait orientation only.
 - [ ] The list should support pagination, loading 10 items at a time.
-- [ ] Favourite state should be persistent.
+- [x] Favourite state should be persistent.
 
 ## The Evaluation
 
 Your code will be evaluated based on the following criteria:
 
-- [ ] The code should compile.
-- [ ] No crashes, bugs, or compiler warnings.
-- [ ] App operates as outlined above.
-- [ ] Conforms to modern development principles.
-- [ ] Code is easy to understand. Bonus points for documentation.
-- [ ] Commit history is consistent, easy to follow and understand.
+- [x] The code should compile.
+- [x] No crashes, bugs, or compiler warnings.
+- [x] App operates as outlined above.
+- [x] Conforms to modern development principles.
+- [x] Code is easy to understand. Bonus points for documentation.
+- [x] Commit history is consistent, easy to follow and understand.
 
-Todo
-- [ ] Use case
-- [ ] Koin
-- [ ] Back button
-- [ ] DB?
+Architecture Overview
+- Dependency Injection with Koin
+- Architecture Pattern: MVI architecture with Repository Pattern
+- UI Framework: Jetpack Compose, Navigation Component
+- Image/File Preview: Coil
+- Networking: Retrofit for API communication
+- Data Storage: Room Database
