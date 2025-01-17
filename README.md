@@ -33,7 +33,7 @@ You will be building a simple two-screen podcasts app. A basic mockup is provide
 	 - [x] Use the following endpoint to fetch podcast data: https://www.listennotes.com/api/docs/?lang=kotlin&test=1#get-api-v2-best_podcasts
 	 - [x] No API key required, you can simply use the mock server to fetch test data. [More information here](https://www.listennotes.help/article/48-how-to-test-the-podcast-api-without-an-api-key "More information here").
 - [x] Focus on implementing the app in portrait orientation only.
-- [ ] The list should support pagination, loading 10 items at a time.
+- [x] The list should support pagination, loading 10 items at a time.
 - [x] Favourite state should be persistent.
 
 ## The Evaluation
