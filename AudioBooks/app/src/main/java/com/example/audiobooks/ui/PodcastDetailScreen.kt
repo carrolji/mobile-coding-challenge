@@ -57,7 +57,8 @@ fun PodcastDetailScreen(
         ) {
         Row(
             modifier = Modifier
-                .height(50.dp)
+                .padding(top = 10.dp)
+                .height(20.dp)
                 .align(Alignment.Start)
                 .clickable { navController.popBackStack() },
             verticalAlignment = Alignment.CenterVertically

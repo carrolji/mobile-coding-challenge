@@ -1,8 +1,8 @@
 package com.example.audiobooks.ui
 
-data class UIState(
+data class PodcastsUIState(
     val isLoading: Boolean = false,
-    val podcastListPage: Int = 1,
+    var podcastListPage: Int = 1,
     val podcastList: List<Podcast> = emptyList()
 )
 

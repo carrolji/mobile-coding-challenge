@@ -9,17 +9,26 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okio.IOException
 import retrofit2.HttpException
+import kotlin.math.ceil
+import kotlin.math.min
 
 interface PodcastRepository {
+    suspend fun maxPaging(): Int
     fun getPodcastDetail(podcastId: String): Flow<Result<Podcast>>
-    fun getPodcastList(forceFetchFromRemote: Boolean): Flow<Result<List<Podcast>>>
+    fun getPodcastList(forceFetchFromRemote: Boolean, paging: Int): Flow<Result<List<Podcast>>>
     fun updateFavouritePodcast(podcastId: String): Flow<Result<Podcast>>
 }
+
+private const val LOAD_SIZE = 10
 
 class PodcastRepositoryImpl(
     private val api: PodcastService,
     private val podcastDatabase: PodcastDatabase
 ) : PodcastRepository {
+
+    override suspend fun maxPaging(): Int {
+        return ceil((podcastDatabase.podcastDao.getAllPodcasts() / LOAD_SIZE).toDouble()).toInt()
+    }
 
     override fun getPodcastDetail(podcastId: String): Flow<Result<Podcast>> {
         return flow {
@@ -35,20 +44,25 @@ class PodcastRepositoryImpl(
         }
     }
 
-    override fun getPodcastList(forceFetchFromRemote: Boolean): Flow<Result<List<Podcast>>> {
+    override fun getPodcastList(forceFetchFromRemote: Boolean, paging: Int): Flow<Result<List<Podcast>>> {
         return flow {
-            Log.d("podcastRepo", "fetching podcast list")
             emit(Result.Loading(true))
-            val localPodcastList = podcastDatabase.podcastDao.getPodcastList()
+
+            //Load 10 items at a time
+            val podcastsSize = podcastDatabase.podcastDao.getAllPodcasts()
+            val limitSize = min(LOAD_SIZE * paging, podcastsSize)
+            val localPodcastList = podcastDatabase.podcastDao.getPodcastsLimit(limitSize)
 
             val shouldFetchLocal = localPodcastList.isNotEmpty() && !forceFetchFromRemote
 
+            //Fetch from local db if podcast is empty and not force fetching
             if (shouldFetchLocal) {
                 emit(Result.Success(localPodcastList.map { it.toModel() }))
                 emit(Result.Loading(false))
                 return@flow
             }
 
+            //Fetch podcast from best podcasts endpoint
             val podcastsFromApi = try {
                 api.getBestPodcasts().podcasts
             } catch (e: IOException) {
@@ -64,6 +78,7 @@ class PodcastRepositoryImpl(
                     podcastDto.toPodcastEntity()
                 }
             }
+            //Insert data into db
             podcastDatabase.podcastDao.upsertPodcastList(podcastEntity)
             emit(Result.Success(podcastEntity.map { it.toModel() }))
             emit(Result.Loading(false))
@@ -72,9 +87,10 @@ class PodcastRepositoryImpl(
 
     override fun updateFavouritePodcast(podcastId: String): Flow<Result<Podcast>> {
         return flow {
-            Log.d("podcastRepo", "updateFavouritePodcast")
+            //Get podcast by podcastId
             val podcastEntity = podcastDatabase.podcastDao.getPodcastById(podcastId)
             if(podcastEntity != null) {
+                //Update favourite state to db
                 val isFavourite = podcastEntity.favourite
                 podcastDatabase.podcastDao.updateFavouritePodcast(podcastId, !isFavourite)
                 val updatePodcast = podcastDatabase.podcastDao.getPodcastById(podcastId)

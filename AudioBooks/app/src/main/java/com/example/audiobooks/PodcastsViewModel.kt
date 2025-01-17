@@ -11,14 +11,14 @@ import kotlinx.coroutines.launch
 import com.example.audiobooks.data.remote.Result
 import com.example.audiobooks.ui.PodcastUiEvent
 import com.example.audiobooks.ui.PodcastItemUIState
-import com.example.audiobooks.ui.UIState
+import com.example.audiobooks.ui.PodcastsUIState
 import kotlinx.coroutines.flow.update
 
 class PodcastsViewModel(
     private val podcastRepository: PodcastRepository
 ) : ViewModel() {
 
-    private val _podcastsUiState = MutableStateFlow(UIState())
+    private val _podcastsUiState = MutableStateFlow(PodcastsUIState())
     val podcastsUiState = _podcastsUiState.asStateFlow()
 
     private val _podcastItemUiState = MutableStateFlow(PodcastItemUIState())
@@ -38,16 +38,29 @@ class PodcastsViewModel(
             }
 
             PodcastUiEvent.Pagination -> {
-                getPodcasts(true)
+                updatePaging()
+                getPodcasts()
             }
         }
     }
 
-    private fun getPodcasts(forceFetch: Boolean) = viewModelScope.launch {
+    private fun updatePaging() = viewModelScope.launch {
+        val maxPaging = podcastRepository.maxPaging()
+        var current = podcastsUiState.value.podcastListPage
+        if(current < maxPaging) current++
+        _podcastsUiState.update {
+            it.copy(
+                podcastListPage = current,
+            )
+        }
+    }
+
+    private fun getPodcasts(forceFetch: Boolean = false) = viewModelScope.launch {
         _podcastsUiState.update {
             it.copy(isLoading = true)
         }
-        podcastRepository.getPodcastList(forceFetch).collectLatest { result ->
+        val paging = podcastsUiState.value.podcastListPage
+        podcastRepository.getPodcastList(forceFetch, paging).collectLatest { result ->
             when(result) {
                 is Result.Error -> {
                     Log.d("podcastsVM", "error: ${result.message}")
@@ -58,7 +71,9 @@ class PodcastsViewModel(
                 is Result.Success -> {
                     result.data?.let { podcasts ->
                         _podcastsUiState.update {
-                            it.copy(podcastList = podcasts, isLoading = false)
+                            it.copy(
+                                podcastList = podcasts,
+                            )
                         }
                     }
                 }
@@ -87,7 +102,7 @@ class PodcastsViewModel(
                 is Result.Success -> {
                     result.data?.let { podcast ->
                         _podcastItemUiState.update {
-                            it.copy(podcast = podcast, isLoading = false)
+                            it.copy(podcast = podcast)
                         }
                     }
                 }
@@ -106,7 +121,7 @@ class PodcastsViewModel(
             if (result is Result.Success) {
                 result.data?.let { podcast ->
                     _podcastItemUiState.update {
-                        it.copy(podcast = podcast, isLoading = false)
+                        it.copy(podcast = podcast)
                     }
                 }
                 getPodcasts(false)
